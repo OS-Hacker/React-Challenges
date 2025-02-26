@@ -3,9 +3,9 @@ import Demo from "./Demo";
 
 const App_6 = () => {
   return (
-    <>
+    <div>
       <Demo />
-    </>
+    </div>
   );
 };
 
