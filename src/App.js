@@ -14,7 +14,7 @@ import App_13 from "./Project/Task-13/App_13";
 import ContextTheme from "./Project/Task-13/context/ContextTheme";
 import App_14 from "./Project/Task-14/App_14";
 import CountContext from "./Project/Task-14/context/CountContext";
-import App_15 from "./Project/Project-15/App_15";
+// import App_15 from "./Project/Project-15/App_15";
 import App_16 from "./Project/Task-16/App_16";
 import App_17 from "./Project/Task-17/App_17";
 import App_18 from "./Project/Task-18/App_18";
@@ -26,7 +26,7 @@ import App_23 from "./Project/Task-23/App_23";
 import App_24 from "./Project/Task-24/App_24";
 import App_25 from "./Project/Task-25/App_25";
 import { Provider } from "react-redux";
-import { store } from "./Project/Task-25/redux-toolkit/store";
+// import { store } from "./Project/Task-25/redux-toolkit/store";
 import App_26 from "./Project/Task-26/App_26";
 import App_6 from "./Project/Task-6/App_6";
 
@@ -44,14 +44,14 @@ const App = () => {
       {/* <App_9 /> */}
       {/* <App_10 /> */}
       {/* <App_11 /> */}
-      {/* <App_12 /> */}
+      <App_12 />
       {/* <ContextTheme>
         <App_13 />
       </ContextTheme> */}
       {/* <CountContext>
         <App_14 />
       </CountContext> */}
-      <App_15 />
+      {/* <App_15 /> */}
       {/* <App_16 /> */}
       {/* <App_17 /> */}
       {/* <App_18 /> */}
@@ -65,7 +65,7 @@ const App = () => {
         <App_25 />
       </Provider> */}
 
-      <App_26 />
+      {/* <App_26 /> */}
     </>
   );
 };
