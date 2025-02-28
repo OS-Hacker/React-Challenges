@@ -7,6 +7,7 @@ const TodoSlice = createSlice({
   },
 
   reducers: {
+
     addTodo: (state, action) => {
       const initialData = {
         id: nanoid(),
@@ -27,6 +28,7 @@ const TodoSlice = createSlice({
       });
     },
   },
+  
 });
 
 export const { addTodo, deleteTodo, updateTodo } = TodoSlice.actions;

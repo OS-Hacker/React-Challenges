@@ -1,30 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { addTransection } from "./redux-toolkit/TransectionSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTransaction,
+  calculateTotals,
+} from "./redux-toolkit/TransectionSlice";
+import History from "./History";
 
-const Trasections = () => {
+const Transactions = () => {
   const [formData, setFormData] = useState({
     title: "",
-    amount: "",
+    amount: +"",
   });
+
+  const dispatch = useDispatch();
+
+  const { transactions, totalAmount, income, expense } = useSelector(
+    (state) => state?.myTransaction
+  );
+
+  useEffect(() => {
+    dispatch(calculateTotals());
+  }, [dispatch, transactions]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => {
-      return { ...prevFormData, [name]: value };
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
-
-  const Dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Dispatch(addTransection(formData));
+    if (!formData.title || !formData.amount) {
+      alert("Please fill in all fields");
+      return;
+    }
+    dispatch(addTransaction(formData));
     setFormData({
       title: "",
       amount: "",
     });
+  };
+
+  // toggle tarnsection and history
+
+  const [showHistory, setShowHistory] = useState(false);
+
+  const toggleHistory = () => {
+    setShowHistory((prevState) => !prevState);
   };
 
   return (
@@ -33,68 +58,69 @@ const Trasections = () => {
         <h1 className="Balance_value">Expense Tracker</h1>
         <p className="Balance_text">Your Balance</p>
         <h1 className="Balance_value" id="total">
-          ₹0
+          ₹{totalAmount?.toFixed(2)}
         </h1>
 
         <div className="container">
           <div className="income_container">
             <h4 className="text">Income</h4>
-            <h2 className="income">₹00.00</h2>
+            <h2 className="income">₹{income?.toFixed(2)}</h2>
           </div>
           <h1 className="text">|</h1>
           <div className="expense_container">
             <h4 className="text">Expense</h4>
-            <h2 className="expense">₹00.00</h2>
+            <h2 className="expense">₹{expense?.toFixed(2)}</h2>
           </div>
         </div>
 
         <div className="btn_container">
-          <button type="button" className="Add_btn btn">
-            ADD
-          </button>
-          <button type="button" className="Show_History btn">
-            History
+          <button type="button" className="Add_btn btn" onClick={toggleHistory}>
+            {showHistory ? "Transactions" : "History"}
           </button>
         </div>
 
-        <div className="Add_transaction">
-          <h2 className="heading">Add Transaction</h2>
-          <form id="transition_form" onSubmit={handleSubmit}>
-            <span className="Error" style={{ color: "red" }}></span>
-            <input
-              type="text"
-              id="inputText"
-              placeholder="Enter Title..."
-              onChange={handleChange}
-              value={formData.title}
-              name="title"
-            />
-            <input
-              type="number"
-              id="inputAmount"
-              placeholder="Amount"
-              autoFocus
-              onChange={handleChange}
-              value={formData.amount}
-              name="amount"
-            />
-            <div>
-              <button type="submit" id="btn-income">
-                ADD transection
-              </button>
+        {!showHistory ? (
+          <>
+            <div className="Add_transaction">
+              <h2 className="heading">Add Transaction</h2>
+              <form id="transition_form" onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  id="inputText"
+                  placeholder="Enter Title..."
+                  autoFocus
+                  onChange={handleChange}
+                  value={formData.title}
+                  name="title"
+                />
+                <input
+                  type="number"
+                  id="inputAmount"
+                  placeholder="Amount"
+                  onChange={handleChange}
+                  value={formData.amount}
+                  name="amount"
+                />
+                <div>
+                  <button type="submit" class="btn">
+                    ADD Transaction
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-
-        <div className="history">
-          <h3 className="heading">History</h3>
-        </div>
+          </>
+        ) : (
+          <>
+            {/* History */}
+            <History transactions={transactions} />
+          </>
+        )}
       </div>
     </Wrapper>
   );
 };
 
-export default Trasections;
+export default Transactions;
 
 const Wrapper = styled.section`
   * {
@@ -108,8 +134,7 @@ const Wrapper = styled.section`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: 90vh;
-    background-color: rgb(214, 214, 214);
+    min-height: 80vh;
     font-family: Arial, Helvetica, sans-serif;
     user-select: none;
   }
@@ -168,13 +193,21 @@ const Wrapper = styled.section`
     margin-bottom: 12px;
     margin-top: 3px;
   }
+
+  #transition_form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
   .btn {
-    padding: 6px 40px;
+    padding: 8px 20px;
     border: none;
     cursor: pointer;
     text-transform: uppercase;
     border-radius: 15px;
-    margin-top: 5px;
+    margin: px 3px;
     background-color: rgb(236, 235, 235);
     transition: all 0.5s;
     font-weight: bold;
@@ -186,48 +219,6 @@ const Wrapper = styled.section`
   }
   .btn_container {
     margin-top: 15px;
-  }
-
-  /* inistal */
-  .history {
-    display: none;
-  }
-
-  .hide {
-    display: none;
-  }
-  .show {
-    display: block;
-  }
-
-  #transition_form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  #btn-income,
-  #btn-expense {
-    padding: 6px 40px;
-    border: none;
-    cursor: pointer;
-    text-transform: uppercase;
-    border-radius: 15px;
-    margin-top: 5px;
-    background-color: rgb(236, 235, 235);
-    transition: all 0.5s;
-    font-weight: bold;
-    user-select: none;
-  }
-
-  #btn-income:hover {
-    background-color: rgb(28, 213, 111);
-    color: white;
-  }
-  #btn-expense:hover {
-    background-color: rgb(213, 46, 28);
-    color: white;
   }
 
   .plus {
@@ -256,28 +247,6 @@ const Wrapper = styled.section`
     font-size: 17px;
     color: white;
     position: relative;
-  }
-
-  .delete-btn {
-    cursor: pointer;
-    background-color: rgb(247, 122, 122);
-    border: 0;
-    color: white;
-    font-size: 14px;
-    line-height: 20px;
-    padding: 1px 2px;
-    position: absolute;
-    top: 50%;
-    right: -52px;
-    transform: translate(-100%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 4px;
-  }
-
-  li:hover .delete-btn {
-    opacity: 1;
-    color: rgb(238, 238, 237);
   }
 
   @media (max-width: 600px) {
