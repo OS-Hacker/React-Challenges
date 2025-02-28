@@ -10,7 +10,7 @@ import History from "./History";
 const Transactions = () => {
   const [formData, setFormData] = useState({
     title: "",
-    amount: +"",
+    amount: "",
   });
 
   const dispatch = useDispatch();
@@ -82,7 +82,9 @@ const Transactions = () => {
         {!showHistory ? (
           <>
             <div className="Add_transaction">
-              <h2 className="heading">Add Transaction</h2>
+              <h2 className="heading" style={{ marginBottom: "10px" }}>
+                Add Transaction
+              </h2>
               <form id="transition_form" onSubmit={handleSubmit}>
                 <input
                   type="text"
@@ -175,7 +177,7 @@ const Wrapper = styled.section`
   }
   .heading {
     text-transform: uppercase;
-    margin-bottom: 8px;
+    /* margin-bottom: 8px; */
     margin-top: 12px;
     font-size: 17px;
     color: gray;

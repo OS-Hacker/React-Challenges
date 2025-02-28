@@ -15,17 +15,28 @@ const History = ({ transactions }) => {
       <div className="history">
         <h3 className="heading">History</h3>
         <ul>
-          {transactions?.map((transaction, index) => (
-            <div key={index} className="dx">
-              <li className={transaction.amount > 0 ? "plus" : "mins"}>
-                <span>{transaction.title}</span>
-                <span>₹{Math.abs(transaction.amount)?.toFixed(2)}</span>
-              </li>
-              <span className="delete-btn" onClick={() => handleDelete(index)}>
-                X
-              </span>
-            </div>
-          ))}
+          {transactions.length > 0 ? (
+            <>
+              {transactions?.map((transaction, index) => (
+                <div key={index} className="dx">
+                  <li className={transaction.amount > 0 ? "plus" : "mins"}>
+                    <span>{transaction.title}</span>
+                    <span>₹{Math.abs(transaction.amount)?.toFixed(2)}</span>
+                  </li>
+                  <span
+                    className="delete-btn"
+                    onClick={() => handleDelete(index)}
+                  >
+                    X
+                  </span>
+                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              <p className="text">Transactions Not Yet</p>
+            </>
+          )}
         </ul>
       </div>
     </Wrapper>
@@ -57,8 +68,6 @@ const Wrapper = styled.section`
   .delete-btn:hover {
     background-color: rgb(242, 63, 63);
   }
-
-
 `;
 
 export default History;
